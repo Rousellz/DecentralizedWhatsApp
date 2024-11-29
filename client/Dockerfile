@@ -1,20 +1,17 @@
-# Dockerfile for Client
-# This Dockerfile creates a container for the client that runs the Streamlit front end
+# Usamos la imagen local cp4 como base
+FROM python:3.11-buster
 
-# Use the official Python image as a base
-FROM python:3.11-alpine
+# Establecemos el directorio de trabajo dentro del contenedor
+WORKDIR /
 
-# Set the working directory in the container
-WORKDIR /app
+# Copiamos el archivo requirements.txt (si lo tienes) al contenedor
+COPY requirements.txt requirements.txt
+COPY . .
+# Instalamos las dependencias listadas en requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the client files into the container
-COPY client/ /app
+# Exponemos el puerto en el que correrá la aplicación Flask
+EXPOSE 8001
 
-# Install dependencies
-RUN pip install --no-cache-dir streamlit requests
-
-# Expose the port Streamlit will run on
-EXPOSE 8501
-
-# Run the Streamlit client
-CMD ["streamlit", "run", "client.py", "--server.port=8501", "--server.enableCORS=false"]
+# Comando para ejecutar la aplicación
+CMD ["python", "app.py"]

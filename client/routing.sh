@@ -8,4 +8,4 @@ Router=$First"."$Second"."$Third".254"
 ip route del default
 ip route add default via $Router
 
-python chord_sockets_full.py $@
+#python chord_sockets_full.py $@

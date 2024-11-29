@@ -11,14 +11,18 @@ class ChatApp:
 
         self.root = root
         self.root.title("WhatsApp-P2P")
-        self.root.geometry("400x600")
+        self.root.geometry("420x620")
 
         # Colores y estilos
-        self.PRIMARY_COLOR = "#128C7E"
+        self.PRIMARY_COLOR = "#075E54"
         self.SECONDARY_COLOR = "#25D366"
         self.BACKGROUND_COLOR = "#ECE5DD"
-        self.TEXT_COLOR = "#FFFFFF"
-        self.FONT = ("Helvetica", 10)
+        self.TEXT_LIGHT = "#FFFFFF"
+        self.TEXT_DARK = "#212121"
+        self.FONT_LARGE = ("Helvetica", 16, "bold")
+        self.FONT_MEDIUM = ("Helvetica", 12)
+        self.FONT_SMALL = ("Helvetica", 10)
+
 
         self.root.configure(bg=self.BACKGROUND_COLOR)
         self.current_frame = None
@@ -29,46 +33,59 @@ class ChatApp:
     def create_main_widgets(self):
         """Crea la pantalla principal de login/registro."""
         self.main_frame = tk.Frame(self.root, bg=self.BACKGROUND_COLOR)
-        self.main_frame.pack(padx=20, pady=40)
+        self.main_frame.pack(expand=True, padx=30, pady=30)
 
         title_label = tk.Label(
             self.main_frame,
             text="Bienvenido a WhatsApp-P2P",
             fg=self.PRIMARY_COLOR,
             bg=self.BACKGROUND_COLOR,
-            font=("Helvetica", 16, "bold"),
+            font=self.FONT_LARGE,
         )
-        title_label.grid(row=0, column=0, columnspan=2, pady=(0, 20))
+        title_label.pack(pady=(0, 30))
 
         tk.Label(
-            self.main_frame, text="Nickname:", bg=self.BACKGROUND_COLOR, font=self.FONT
-        ).grid(row=1, column=0, sticky="e", pady=5)
-        self.nickname_entry = tk.Entry(self.main_frame, font=self.FONT)
-        self.nickname_entry.grid(row=1, column=1, pady=5)
+            self.main_frame, 
+            text="Nickname:", 
+            bg=self.BACKGROUND_COLOR, 
+            font=self.FONT_MEDIUM,
+            fg=self.TEXT_DARK
+        ).pack(anchor="w", pady=5)
+        self.nickname_entry = tk.Entry(self.main_frame, font=self.FONT_MEDIUM, bd=2, relief="groove")
+        self.nickname_entry.pack(fill=tk.X, pady=5)
 
         tk.Label(
-            self.main_frame, text="Password:", bg=self.BACKGROUND_COLOR, font=self.FONT
-        ).grid(row=2, column=0, sticky="e", pady=5)
-        self.password_entry = tk.Entry(self.main_frame, show="*", font=self.FONT)
-        self.password_entry.grid(row=2, column=1, pady=5)
+            self.main_frame, 
+            text="Password:", 
+            bg=self.BACKGROUND_COLOR, 
+            font=self.FONT_MEDIUM,
+            fg=self.TEXT_DARK
+        ).pack(anchor="w", pady=5)
+        self.password_entry = tk.Entry(self.main_frame, show="*", font=self.FONT_MEDIUM, bd=2, relief="groove")
+        self.password_entry.pack(fill=tk.X, pady=5)
+
+        button_frame = tk.Frame(self.main_frame, bg=self.BACKGROUND_COLOR)
+        button_frame.pack(pady=20)
 
         tk.Button(
-            self.main_frame,
+            button_frame,
             text="Register",
             command=self.register,
             bg=self.PRIMARY_COLOR,
-            fg=self.TEXT_COLOR,
-            font=self.FONT,
-        ).grid(row=3, column=0, pady=15)
+            fg=self.TEXT_DARK,
+            font=self.FONT_MEDIUM,
+            activebackground=self.SECONDARY_COLOR,
+        ).pack(side=tk.LEFT, padx=10, pady=10)
 
         tk.Button(
-            self.main_frame,
+            button_frame,
             text="Login",
             command=self.login,
             bg=self.SECONDARY_COLOR,
-            fg=self.TEXT_COLOR,
-            font=self.FONT,
-        ).grid(row=3, column=1, pady=15)
+            fg=self.TEXT_DARK,
+            font=self.FONT_MEDIUM,
+            activebackground=self.PRIMARY_COLOR,
+        ).pack(side=tk.LEFT, padx=10, pady=10)
 
         self.current_frame = self.main_frame
 
@@ -77,19 +94,21 @@ class ChatApp:
         if self.current_frame:
             self.current_frame.pack_forget()
         self.current_frame = new_frame
-        self.current_frame.pack(padx=20, pady=40)
+        self.current_frame.pack(expand=True, padx=20, pady=20)
 
     def create_back_button(self, parent, command):
         """Crea un botón de retorno."""
         back_button = tk.Button(
             parent,
             text="← Back",
+            # command=lambda: threading.Thread(target=command).start(),
             command=command,
-            fg=self.TEXT_COLOR,
+            fg=self.TEXT_DARK,
             bg=self.PRIMARY_COLOR,
-            font=self.FONT,
+            font=self.FONT_MEDIUM,
+            activebackground=self.SECONDARY_COLOR,
         )
-        back_button.pack(anchor="nw", pady=5, padx=5)
+        back_button.pack(anchor="nw", pady=10, padx=10)
 
     def register(self):
         """Registra un nuevo usuario."""
@@ -145,17 +164,17 @@ class ChatApp:
             self.chats_frame,
             text="Chats",
             bg=self.BACKGROUND_COLOR,
-            font=("Helvetica", 14, "bold"),
+            font=self.FONT_LARGE,
         )
-        chats_label.pack(pady=5)
+        chats_label.pack(pady=20)
 
         contacts_button = tk.Button(
             self.chats_frame,
             text="Contactos",
             command=self.open_contacts_window,
             bg=self.SECONDARY_COLOR,
-            fg=self.TEXT_COLOR,
-            font=self.FONT,
+            fg=self.TEXT_DARK,
+            font=self.FONT_MEDIUM,
         )
         contacts_button.pack(pady=10)
 
@@ -174,18 +193,18 @@ class ChatApp:
             text="Agregar Contacto",
             command=self.add_contact,
             bg=self.PRIMARY_COLOR,
-            fg=self.TEXT_COLOR,
-            font=self.FONT,
-        ).pack(pady=5)
+            fg=self.TEXT_DARK,
+            font=self.FONT_MEDIUM,
+        ).pack(pady=10)
 
         tk.Button(
             self.contacts_frame,
             text="Eliminar Contacto",
             command=self.delete_contact,
             bg=self.PRIMARY_COLOR,
-            fg=self.TEXT_COLOR,
-            font=self.FONT,
-        ).pack(pady=5)
+            fg=self.TEXT_DARK,
+            font=self.FONT_MEDIUM,
+        ).pack(pady=10)
 
         self.get_contacts()
         self.switch_frame(self.contacts_frame)
@@ -203,7 +222,7 @@ class ChatApp:
                     self.contacts_frame,
                     text=name,
                     command=lambda ch=nickname: self.open_chat_window(ch),
-                    font=self.FONT,
+                    font=self.FONT_MEDIUM,
                 ).pack(pady=5)
         else:
             messagebox.showerror("Error", response.text)
@@ -254,8 +273,8 @@ class ChatApp:
                     self.chats_frame,
                     text=chat,
                     command=lambda ch=chat: self.open_chat_window(ch),
-                    font=self.FONT,
-                ).pack(pady=5)
+                    font=self.FONT_MEDIUM,
+                ).pack(pady=10)
         else:
             messagebox.showerror("Error", response.text)
 
@@ -270,14 +289,14 @@ class ChatApp:
             self.chat_frame,
             text=f"Chat con {chat}",
             bg=self.BACKGROUND_COLOR,
-            font=("Helvetica", 14, "bold"),
+            font=self.FONT_LARGE,
         )
-        chat_title.pack(pady=5)
+        chat_title.pack(pady=20)
 
         self.message_display = scrolledtext.ScrolledText(
-            self.chat_frame, wrap=tk.WORD, font=self.FONT, height=20
+            self.chat_frame, wrap=tk.WORD, font=self.FONT_MEDIUM, height=20
         )
-        self.message_display.pack(padx=5, pady=5, fill=tk.BOTH, expand=True)
+        self.message_display.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
         self.message_display.config(state=tk.DISABLED)
 
         self.get_messages(chat)
@@ -285,7 +304,7 @@ class ChatApp:
         entry_frame = tk.Frame(self.chat_frame, bg=self.BACKGROUND_COLOR)
         entry_frame.pack(fill=tk.X, pady=5)
 
-        self.message_entry = tk.Entry(entry_frame, font=self.FONT)
+        self.message_entry = tk.Entry(entry_frame, font=self.FONT_MEDIUM)
         self.message_entry.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=5)
 
         tk.Button(
@@ -293,8 +312,8 @@ class ChatApp:
             text="Enviar",
             command=lambda: self.send_message(chat),
             bg=self.SECONDARY_COLOR,
-            fg=self.TEXT_COLOR,
-            font=self.FONT,
+            fg=self.TEXT_DARK,
+            font=self.FONT_MEDIUM,
         ).pack(side=tk.RIGHT, padx=5)
 
         self.switch_frame(self.chat_frame)
@@ -333,8 +352,10 @@ class ChatApp:
 
 
 if __name__ == "__main__":
-    LOCAL_IP = "localhost"
+    LOCAL_IP = "127.0.0.1"
     CLIENT_PORT = 5000  # Asegurarse de que coincida con el puerto del servidor
     root = tk.Tk()
     app = ChatApp(root, LOCAL_IP, CLIENT_PORT)
     root.mainloop()
+
+

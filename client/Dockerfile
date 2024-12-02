@@ -1,15 +1,17 @@
 # Dockerfile for Client
-FROM python:3.9-slim
+FROM python:3.11-buster
 
 # Set the working directory in the container
 WORKDIR /app
 
-# # Install dependencies and add iproute2 for `ip` command
 
 # Copy all files into the container
 COPY client/ /app
 
 COPY client/client.sh /app
+
+# Update and install system dependencies
+# RUN apk add --no-cache build-base cmake bash
 
 # Install dependencies from requirements.txt
 RUN chmod +x /app/client.sh

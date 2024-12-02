@@ -2,13 +2,12 @@
 # # This Dockerfile creates a container for the server that handles messaging logic using Flask
 
 # # Use the official Python image as a base
-FROM python:3.9-slim
+FROM python:3.11-buster
 # FROM image_server
 
 # # Set the working directory in the container
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y iproute2
 # # Copy the server files into the container
 COPY server/ /app
 

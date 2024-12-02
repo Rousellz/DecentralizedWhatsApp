@@ -20,6 +20,15 @@ else
     echo "Network servers created."
 fi
 
+# check router:base docker image existence 
+
+docker image inspect router >/dev/null 2>&1
+if [ $? -eq 0 ]; then
+    echo "Image router:base exists."
+else
+    docker build -t router:base -f router/router_base.Dockerfile router/
+    echo "Image router:base created."
+fi
 
 # check router docker image existence 
 

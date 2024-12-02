@@ -24,7 +24,6 @@ services:
       - "8501:8501"  # Expone el puerto de Streamlit
     cap_add:
       - NET_ADMIN
-    command: /bin/bash
     tty: true
     stdin_open: true  # Exponer el puerto de Streamlit
     volumes:
@@ -40,7 +39,6 @@ services:
     cap_add:
       - NET_ADMIN
     privileged: true 
-    command: /bin/bash
     ports:
       - "8502:8501"  # Expone el puerto de Streamlit
     tty: true

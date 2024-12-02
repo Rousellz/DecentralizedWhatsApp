@@ -21,4 +21,4 @@ EXPOSE 8501
 
 # Run routing.sh and then Streamlit client
 
-CMD /app/client.sh && ping 10.0.11.2
+CMD /app/client.sh

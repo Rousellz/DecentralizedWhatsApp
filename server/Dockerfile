@@ -8,7 +8,7 @@ FROM python:3.9-slim
 # # Set the working directory in the container
 WORKDIR /app
 
-
+RUN apt-get update && apt-get install -y iproute2
 # # Copy the server files into the container
 COPY server/ /app
 

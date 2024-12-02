@@ -1,7 +1,6 @@
-from router:base
+from alpine
 
-copy route.sh /root/route.sh
+run echo "net.ipv4.ip_forward=1" | tee -a /etc/sysctl.conf
+run sysctl -p
 
-run chmod +x /root/route.sh
-
-entrypoint /root/route.sh
+cmd /bin/sh

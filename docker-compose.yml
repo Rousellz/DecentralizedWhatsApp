@@ -2,7 +2,7 @@ version: '3'
 
 services:
   server:
-    image: image_server
+    image: server
     container_name: container_server
     ports:
       - "5001:5000"  # Exponer el puerto del servidor
@@ -11,13 +11,17 @@ services:
       - ${PWD}/logs/container_1:/app/logs
       - ${PWD}/databases/container_server:/app/database
     networks:
-      - servers_network
+      servers:
+        ipv4_address: 10.0.11.10  # Asignar una IP fija al servidor
+  
 
   client1:
-    image: image_client
-    container_name: container_client1
+    image: client
+    container_name: client1
     ports:
       - "8501:8501"  # Expone el puerto de Streamlit
+    cap_add:
+      - NET_ADMIN
     command: /bin/bash
     tty: true
     stdin_open: true  # Exponer el puerto de Streamlit
@@ -25,13 +29,14 @@ services:
       - ${PWD}/client:/app/code
       - ${PWD}/logs/client_1:/app/logs
     networks:
-      - clients_network
+      - clients
+      # - servers
 
   client2:
-    image: image_client
-    container_name: container_client2
-    # cap_add:
-    #   - NET_ADMIN
+    image: client
+    container_name: client2
+    cap_add:
+      - NET_ADMIN
     privileged: true 
     command: /bin/bash
     ports:
@@ -42,10 +47,11 @@ services:
       - ${PWD}/client:/app/code
       - ${PWD}/logs/client_2:/app/logs
     networks:
-      - clients_network
+      - clients
+      # - servers
 
 networks:
-  clients_network:
+  clients:
     external: true  # Ya que la red fue creada por 'setup_docker.sh'
-  servers_network:
+  servers:
     external: true  # Ya que la red fue creada por 'setup_docker.sh'

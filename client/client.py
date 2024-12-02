@@ -6,7 +6,7 @@ import requests
 
 # URL del servidor Flask
 # SERVER_URL = "http://127.0.0.1:5000"
-SERVER_URL = "http://10.0.21.2:5001"
+SERVER_URL = "http://10.0.11.10:5000"
 
 if "session" not in st.session_state:
     st.session_state["session"] = requests.Session()

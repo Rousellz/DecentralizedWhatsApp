@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+  server:
+    image: image_server
+    container_name: container_server
+    ports:
+      - "5001:5000"  # Exponer el puerto del servidor
+    volumes:
+      - ${PWD}/server:/app/code
+      - ${PWD}/logs/container_1:/app/logs
+      - ${PWD}/databases/container_server:/app/database
+    networks:
+      - servers_network
+
+  client1:
+    image: image_client
+    container_name: container_client1
+    ports:
+      - "8501:8501"  # Expone el puerto de Streamlit
+    command: /bin/bash
+    tty: true
+    stdin_open: true  # Exponer el puerto de Streamlit
+    volumes:
+      - ${PWD}/client:/app/code
+      - ${PWD}/logs/client_1:/app/logs
+    networks:
+      - clients_network
+
+  client2:
+    image: image_client
+    container_name: container_client2
+    # cap_add:
+    #   - NET_ADMIN
+    privileged: true 
+    command: /bin/bash
+    ports:
+      - "8502:8501"  # Expone el puerto de Streamlit
+    tty: true
+    stdin_open: true # Exponer otro puerto para un segundo cliente
+    volumes:
+      - ${PWD}/client:/app/code
+      - ${PWD}/logs/client_2:/app/logs
+    networks:
+      - clients_network
+
+networks:
+  clients_network:
+    external: true  # Ya que la red fue creada por 'setup_docker.sh'
+  servers_network:
+    external: true  # Ya que la red fue creada por 'setup_docker.sh'

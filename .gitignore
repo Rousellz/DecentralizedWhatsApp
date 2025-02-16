@@ -1,1 +1,9 @@
 env/
+.vscode
+__pycache__
+data.sqlite
+first_replication_data.sqlite
+second_replication_data.sqlite
+client_data.sqlite
+server_addresses_cache.json
+.DS_Store

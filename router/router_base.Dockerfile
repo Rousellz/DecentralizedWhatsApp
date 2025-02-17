@@ -1,5 +1,6 @@
-from python:3-alpine
+FROM python:3-alpine
 
-run apk update && apk add iptables && echo "net.ipv4.ip_forward=1"  | tee -a /etc/sysctl.conf
+RUN apk update && apk add --no-cache iptables && echo "net.ipv4.ip_forward=1" | tee -a /etc/sysctl.conf && sysctl -p
+RUN apk add procps iptables iproute2
 
-cmd /bin/sh
+CMD /bin/sh

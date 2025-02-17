@@ -38,7 +38,7 @@ def server_multicast_listener():
         logging.info("[Multicast] Esperando mensajes...")
         data, addr = sock.recvfrom(1024)
         logging.info(f"[Multicast] Recibido: {data} de {addr}")
-        if data == MESSAGE_FROM_CLIENT:
+        if data == MESSAGE_FROM_CLIENT or data == MESSAGE_FROM_SERVER:
             # Respondemos con MESSAGE_FROM_SERVER
             server_ip = get_ip()
             response = f"{RESPONSE_PREFIX}{server_ip}"

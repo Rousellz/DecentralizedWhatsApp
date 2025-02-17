@@ -15,7 +15,7 @@ logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
-def client_multicast_discovery(timeout=5, attempts=3):
+def client_multicast_discovery(timeout=5, attempts=3,message=MESSAGE_FROM_CLIENT):
     logging.info(f"[Client Discovery] entrando a client_multicast_discovery()")
     """
     Envía 'MESSAGE_FROM_CLIENT' a 224.0.0.1:10000 'attempts' veces,
@@ -39,7 +39,7 @@ def client_multicast_discovery(timeout=5, attempts=3):
     try:
         for _ in range(attempts):
             logging.info(f"[Client Discovery] entre al try voy a enviar el mensaje")
-            sock.sendto(MESSAGE_FROM_CLIENT, (MCAST_GRP, MCAST_PORT))
+            sock.sendto(message, (MCAST_GRP, MCAST_PORT))
             time.sleep(0.2)
         logging.info(f"[Client Discovery] voy a entrar al while True para recibir")
         while True:

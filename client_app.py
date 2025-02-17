@@ -105,10 +105,14 @@ def start_client():
     server_task = Thread(target=server_run, daemon=True)
     server_task.start()
 
+
     time.sleep(1)
     # root = tk.Tk()
     # ChatApp(root, LOCAL_IP, CLIENT_PORT)
     # root.mainloop()
+    console_ui = UI(LOCAL_IP, CLIENT_PORT)
+    console_ui.start()
+
 
 start_client()
 

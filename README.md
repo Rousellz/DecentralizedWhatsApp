@@ -1,1 +1,1 @@
-# DecentralizedWhatsApp
+# SD-WhatsApp-P2P

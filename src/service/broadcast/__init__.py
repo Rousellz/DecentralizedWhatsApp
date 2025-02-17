@@ -1,0 +1,6 @@
+from network_utils.ip_address import IPAddress
+
+NET_MASK = IPAddress(255, 255, 255, 0)
+BROADCAST_PORT = "9010"
+BROADCAST_SERVER = ("9030", b"MESSAGE FROM CHORD NODE")
+BROADCAST_CLIENT = ("9070", b"MESSAGE FROM CLIENT")

@@ -4,8 +4,6 @@ from src.service.heartbeat import HeartBeatManager
 from network_utils import get_ip, SERVICE_PORT
 from .client_utils import SERVER_ADDRESSES_CACHE_FILENAME
 
-
-
 class ClientInstance:
     """
     Represents a client instance for a messaging application.

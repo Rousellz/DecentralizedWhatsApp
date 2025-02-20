@@ -36,23 +36,29 @@ class RemoteNode(BaseNode):
         try:
             response = self._manager.get("/chord/successor/", timeout=1)
         except Exception as e:
-            print("ERROR:", e)
+            print("")
+            # print("ERROR:", e)
         else:
             if response.status_code == 200:
                 model = BaseNodeModel(**response.json())
                 return self._ensure_local(self.__class__.from_base_model(model))
 
-            print("ERROR:", response.json()["detail"])
+            print("")
+            # print("ERROR:", response.json()["detail"])
 
     def set_successor(self, node: BaseNode):
         try:
             response = self._manager.put(
                 "/chord/successor/", data=node.serialize(), timeout=1)
         except Exception as e:
-            print("ERROR:", e)
+            print("")
+            # print("ERROR:", e)
+
         else:
             if response.status_code != 200:
-                print("ERROR:", response.json()["detail"])
+                print("")
+                # print("ERROR:", response.json()["detail"])
+
 
     def predecessor(self):
         try:
@@ -93,13 +99,15 @@ class RemoteNode(BaseNode):
         try:
             response = self._manager.get(f"/chord/successor/{id}", timeout=3)
         except Exception as e:
-            print("ERROR:", e)
+            print("")
+            # print("ERROR:", e)
         else:
             if response.status_code == 200:
                 model = BaseNodeModel(**response.json())
                 return self._ensure_local(self.__class__.from_base_model(model))
 
-            print("ERROR:", response.json()["detail"])
+            print("")    
+            # print("ERROR:", response.json()["detail"])
 
     def notify(self, node: BaseNode):
         try:
@@ -115,7 +123,8 @@ class RemoteNode(BaseNode):
         try:
             response = self._manager.get("/chord/heart/", timeout=1)
         except Exception as e:
-            print("ERROR:", e)
+            print("")
+            # print("ERROR:", e)
         else:
             if response.status_code == 200:
                 return str(response.json())

@@ -1,48 +1,39 @@
 import socket
 import struct
-import time
+import threading
+
 import logging
-from network_utils import inject_to_state, get_ip
 
+from network_utils import get_ip
 
-# Configuración de logs
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
-MCAST_GRP = "224.0.0.1"
-MCAST_PORT = 10000
 
-MESSAGE_FROM_CLIENT = b"MESSAGE_FROM_CLIENT"
-MESSAGE_FROM_SERVER = b"MESSAGE_FROM_SERVER"
-RESPONSE_PREFIX = "SERVER_RESPONSE:"
+MULTICAST_GROUP = "224.0.0.1"  # misma que usas para el descubrimiento
+MULTICAST_PORT = 10000          # mismo puerto para descubrimiento multicast
+DISCOVERY_MESSAGE = "DISCOVER_SERVERS"
 
-def server_multicast_listener():
-    logging.info("[Multicast] Iniciando server_multicast_listener()...")
-    """
-    Bucle infinito: 
-    - Se une a 224.0.0.1:10000
-    - Cuando recibe MESSAGE_FROM_CLIENT, responde con MESSAGE_FROM_SERVER
-    """
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+def multicast_listener(server_ip):
+    logging.info("entrando a multicast_listener") 
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-
-    sock.bind(("", MCAST_PORT))
-
-    mreq = struct.pack("4sl", socket.inet_aton(MCAST_GRP), socket.INADDR_ANY)
+    sock.bind(('', MULTICAST_PORT))
+    ip=get_ip()
+    mreq = struct.pack('4sl', socket.inet_aton(MULTICAST_GROUP), socket.INADDR_ANY)
     sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
-
-    logging.info(f"[Multicast] Servidor escuchando en {MCAST_GRP}:{MCAST_PORT}...")
-
+    sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 1)
+    
     while True:
-        logging.info("[Multicast] Esperando mensajes...")
         data, addr = sock.recvfrom(1024)
-        logging.info(f"[Multicast] Recibido: {data} de {addr}")
-        if data == MESSAGE_FROM_CLIENT or data == MESSAGE_FROM_SERVER:
-            # Respondemos con MESSAGE_FROM_SERVER
-            server_ip = get_ip()
-            response = f"{RESPONSE_PREFIX}{server_ip}"
-            logging.info(f"[Multicast] Enviando respuesta a {addr} (al cliente){response}")
-            sock.sendto(response.encode('utf-8'), (MCAST_GRP, MCAST_PORT))
-            # sock.sendto(response, (MCAST_GRP, MCAST_PORT))
-        time.sleep(0.1)
+        logging.info(f"recibiendo multicast: {data} de {addr}")
+        logging.info(f"encontre un mensaje")
+        response, data_ip =data.decode().split(',')
+        logging.info(f"response: {response}, data_ip: {data_ip}, addr: {addr[0]}, ip: {ip}")
+        if response == DISCOVERY_MESSAGE and data_ip != ip :
+            logging.info(f"entre al if de multicast_listener")
+            # Envía la IP del servidor de respuesta
+            message= f"{DISCOVERY_MESSAGE},{ip}".encode()
+            logging.info(f"{message}")  
+            sock.sendto(message, (MULTICAST_GROUP, MULTICAST_PORT))

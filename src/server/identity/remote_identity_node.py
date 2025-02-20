@@ -112,26 +112,30 @@ class RemoteIdentityNode(ChordRemoteNode, BaseIdentityNode):
             response = self._manager.post(
                 f"/info/identity/{nickname}", data={"search_id": search_id}, timeout=5)
         except Exception as e:
-            print("ERROR:", e)
+            print("")
+            # print("ERROR:", e)
         else:
             if response.status_code == 200:
                 model = BaseNodeModel(**response.json())
                 return self._ensure_local(self.__class__.from_base_model(model))
 
-            print("ERROR:", response.json()["detail"])
+            print("")
+            # print("ERROR:", response.json()["detail"])
 
     def search_identity_node(self, nickname: str):
         try:
             response = self._manager.get(
                 f"/info/search_entity/{nickname}", timeout=3)
         except Exception as e:
-            print("ERROR:", e)
+            print("")
+            # print("ERROR:", e)
         else:
             if response.status_code == 200:
                 model = BaseNodeModel(**response.json())
                 return self._ensure_local(self.__class__.from_base_model(model))
 
-            print("ERROR:", response.json()["detail"])
+            print("")
+            # print("ERROR:", response.json()["detail"])
 
 
     def add_messages(self, source: str, destiny: str, value: str, database_id: int, id: int):

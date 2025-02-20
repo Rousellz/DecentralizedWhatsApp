@@ -9,4 +9,7 @@ echo "Rutas después de cambiar:"
 ip route
 
 
+
 python /home/app/client_app.py
+
+# ping 10.0.11.2
